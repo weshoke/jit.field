@@ -16,3 +16,5 @@ Fields are useful for placing and retrieving values from spatial locations.  Two
 
 ### Narrow-Band Level Set Objects
 __jit.field.sphere__ and __jit.field.particles__ generate narrow-band level sets.  The size of the narrow band is determined by the __@halfwidth__ attribute, which dictates home many voxels on either side of the level set to calculate the distance function.
+
+![Narrow-Band Level Set](/images/narrowband.levelset.png)
