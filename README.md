@@ -25,7 +25,7 @@ Fields can be transformed using the __jit.field.op__ object.  It’s just like _
 #### Binary Operators
 * __min__: Take the minimum of two fields.  The minimum on level sets is equivalent to a boolean union.
 * __max__: Take the maximum of two fields.  The maximum on level sets is equivalent to a boolean intersection.
-* __+__: Sum two fields
+* __+__: Sum two fields per-voxel
 * __*__: Multiply two fields per-voxel
 
 ####Unary Operators
