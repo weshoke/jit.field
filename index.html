@@ -1,0 +1,55 @@
+<html>
+<head>
+</head>
+<body>
+<h1>jit.field</h1>
+
+<h5>Volumetric data processing for Jitter</h5>
+
+<p>The <strong>jit.field</strong> set of objects are a family of volumetric field processing components.  A field is an object that associates a piece of information with a spatial location.  The core object is <strong>jit.field</strong>, which represents an infinite 3D voxel grid.  Conceptually, <strong>jit.field</strong> is a <strong>jit.matrix</strong> located in space with the exception that the field can have a value at any spatial location, so the number of cells in any given dimension is not fixed.</p>
+
+<p>Since <strong>jit.field</strong> voxels are located in space, they have both a location and a size.  Position in controlled with the <strong>@position</strong> and <strong>@rotate</strong> attributes.  Size is controlled with the <strong>@voxelsize</strong> attribute.  All voxels in a <strong>jit.field</strong> object have the exact same size.</p>
+
+<p>Each voxel in a field has a position defined relative to the field, which is in a coordinate system called <em>index space</em>.  Index space coordinates are in integers with the voxel at (0, 0, 0) at the center of the field.  Each voxel also has a corresponding position in <em>world space</em>, which is determined by apply the field’s position, rotate, and voxelsize attributes to the voxel’s index space coordinate.</p>
+
+<p><img src="/images/voxel.png" alt="Voxel" title="" />
+<img src="/images/voxel.grid.png" alt="Voxel Grid" title="" /></p>
+
+<p>Fields are useful for placing and retrieving values from spatial locations.  Two common uses for fields are as level sets and vector fields.  Level sets describe surfaces through a distance field.  The surface of the level set is located where the distance field is zero.  This is no different from how jit.gl.isosurface works.  The difference is that in jit.field, not every voxel needs to have a value explicitly defined.  Only those voxels near the level set surface matter since they mark the location of the surface.  Level sets defined this way are called narrow-band level sets.</p>
+
+<h3>Narrow-Band Level Set Objects</h3>
+
+<p><strong>jit.field.sphere</strong> and <strong>jit.field.particles</strong> generate narrow-band level sets.  The size of the narrow band is determined by the <strong>@halfwidth</strong> attribute, which dictates home many voxels on either side of the level set to calculate the distance function.</p>
+
+<p><img src="/images/narrowband.levelset.png" alt="Narrow-Band Level Set" title="" /></p>
+
+<h3>Transforming Fields</h3>
+
+<p>Fields can be transformed using the <strong>jit.field.op</strong> object.  It’s just like <strong>jit.op</strong> except for fields.  It supports a number of binary and unary operators:</p>
+
+<h4>Binary Operators</h4>
+
+<ul>
+<li><strong>min</strong>: Take the minimum of two fields.  The minimum on level sets is equivalent to a boolean union.</li>
+<li><strong>max</strong>: Take the maximum of two fields.  The maximum on level sets is equivalent to a boolean intersection.</li>
+<li><strong>+</strong>: Sum two fields per-voxel</li>
+<li><strong>*</strong>: Multiply two fields per-voxel</li>
+</ul>
+
+<h4>Unary Operators</h4>
+
+<p>Not all unary operators work for all field formats.  Furthermore, some unary operators take inputs of one format and output a different format.  The accepted input and output types of an operator are indicated in the following format: (\<planecount\> \<type\>) → (\<planecount\> \<type\>).  The format to the left of the arrow is the input format.  The format to the right is the corresponding output format.  The keyword <em>any</em> refers to any planecount or type depending on location.
+* <strong>normalize</strong>: (any any) → (any any) Normalize a vector field.  If the field is scalar, no operation is performed.
+* <strong>magnitude</strong>: (any any) → (1 any) Calculate the magnitude of a field.
+* <strong>curvature</strong>: (1 float32) → (1 float32) Calculate the mean curvature of a level set
+* <strong>laplacian</strong>: (1 float32) → (1 float32) Calculate the Laplacian of a level set
+* <strong>gradient</strong>: (1 float32) → (3 float32) Calculate the gradient of a level set
+* <strong>divergence</strong>: (any any) → (1 any) Calculate the divergence of a field.
+* <strong>curl</strong>: (3 float32) → (3 float32) Calculate the curl of a vector field.</p>
+
+<h3>Read/Write to a Field</h3>
+
+<p>To read and write to a field with a matrix, use the <strong>jit.field.read</strong> and <strong>jit.field.write</strong> objects.  Both objects can index fields in either world or index coordinates.  If the position matrix is type float32, the position matrix will be assumed to be in world coordinates.  If the matrix is type long, it will be assumed to be in index space.  When writing to a matrix, the values to be written need to have the same format as the field in terms of planecount and type.</p>
+
+</body>
+</html>
