@@ -37,3 +37,6 @@ Not all unary operators work for all field formats.  Furthermore, some unary ope
 * __gradient__: (1 float32) → (3 float32) Calculate the gradient of a level set
 * __divergence__: (any any) → (1 any) Calculate the divergence of a field.
 * __curl__: (3 float32) → (3 float32) Calculate the curl of a vector field.
+
+### Read/Write to a Field
+To read and write to a field with a matrix, use the __jit.field.read__ and __jit.field.write__ objects.  Both objects can index fields in either world or index coordinates.  If the position matrix is type float32, the position matrix will be assumed to be in world coordinates.  If the matrix is type long, it will be assumed to be in index space.  When writing to a matrix, the values to be written need to have the same format as the field in terms of planecount and type.
