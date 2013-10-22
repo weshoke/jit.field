@@ -30,10 +30,10 @@ Fields can be transformed using the __jit.field.op__ object.  It’s just like _
 
 ####Unary Operators
 Not all unary operators work for all field formats.  Furthermore, some unary operators take inputs of one format and output a different format.  The accepted input and output types of an operator are indicated in the following format: (\<planecount\> \<type\>) → (\<planecount\> \<type\>).  The format to the left of the arrow is the input format.  The format to the right is the corresponding output format.  The keyword __any__ refers to any planecount or type depending on location.
-* __normalize__: (any any) -> (any any) Normalize a vector field.  If the field is scalar, no operation is performed.
-* __magnitude__: (any any) -> (1 any) Calculate the magnitude of a field.
-* __curvature__: (1 float32) -> (1 float32) Calculate the mean curvature of a level set
-* __laplacian__: (1 float32) -> (1 float32) Calculate the Laplacian of a level set
-* __gradient__: (1 float32) -> (3 float32) Calculate the gradient of a level set
-* __divergence__: (any any) -> (1 any) Calculate the divergence of a field.
-* __curl__: (3 float32) -> (3 float32) Calculate the curl of a vector field.
+* __normalize__: (any any) → (any any) Normalize a vector field.  If the field is scalar, no operation is performed.
+* __magnitude__: (any any) → (1 any) Calculate the magnitude of a field.
+* __curvature__: (1 float32) → (1 float32) Calculate the mean curvature of a level set
+* __laplacian__: (1 float32) → (1 float32) Calculate the Laplacian of a level set
+* __gradient__: (1 float32) → (3 float32) Calculate the gradient of a level set
+* __divergence__: (any any) → (1 any) Calculate the divergence of a field.
+* __curl__: (3 float32) → (3 float32) Calculate the curl of a vector field.
