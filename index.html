@@ -5,7 +5,7 @@
 <style type="text/css">
 
 h1 {
-	color: #300333;
+	color: #333333;
 	font-size: 2.5em;
 	border-bottom: 1px solid #ddd;
 	margin: 1em 0 15px;
@@ -55,14 +55,14 @@ h1 {
 
 <h4>Unary Operators</h4>
 
-<p>Not all unary operators work for all field formats.  Furthermore, some unary operators take inputs of one format and output a different format.  The accepted input and output types of an operator are indicated in the following format: (\<planecount\> \<type\>) → (\<planecount\> \<type\>).  The format to the left of the arrow is the input format.  The format to the right is the corresponding output format.  The keyword <em>any</em> refers to any planecount or type depending on location.
-* <strong>normalize</strong>: (any any) → (any any) Normalize a vector field.  If the field is scalar, no operation is performed.
+<p>Not all unary operators work for all field formats.  Furthermore, some unary operators take inputs of one format and output a different format.  The accepted input and output types of an operator are indicated in the following format: (\<planecount\> \<type\>) &#x2192; (\<planecount\> \<type\>).  The format to the left of the arrow is the input format.  The format to the right is the corresponding output format.  The keyword <em>any</em> refers to any planecount or type depending on location.
+* <strong>normalize</strong>: (any any) &#x2192; (any any) Normalize a vector field.  If the field is scalar, no operation is performed.
 * <strong>magnitude</strong>: (any any) &#x2192; (1 any) Calculate the magnitude of a field.
 * <strong>curvature</strong>: (1 float32) &#x2192; (1 float32) Calculate the mean curvature of a level set
-* <strong>laplacian</strong>: (1 float32) → (1 float32) Calculate the Laplacian of a level set
-* <strong>gradient</strong>: (1 float32) → (3 float32) Calculate the gradient of a level set
-* <strong>divergence</strong>: (any any) → (1 any) Calculate the divergence of a field.
-* <strong>curl</strong>: (3 float32) → (3 float32) Calculate the curl of a vector field.</p>
+* <strong>laplacian</strong>: (1 float32) &#x2192; (1 float32) Calculate the Laplacian of a level set
+* <strong>gradient</strong>: (1 float32) &#x2192; (3 float32) Calculate the gradient of a level set
+* <strong>divergence</strong>: (any any) &#x2192; (1 any) Calculate the divergence of a field.
+* <strong>curl</strong>: (3 float32) &#x2192; (3 float32) Calculate the curl of a vector field.</p>
 
 <h3>Read/Write to a Field</h3>
 
