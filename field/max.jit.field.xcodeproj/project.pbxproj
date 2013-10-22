@@ -1,0 +1,312 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B927AE3817FF6A77003011D9 /* jit.field.op.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B927AE3617FF6A77003011D9 /* jit.field.op.cpp */; };
+		B98B4B6518031D680017FE4D /* jit.field.particles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B98B4B6318031D670017FE4D /* jit.field.particles.cpp */; };
+		B9B805621811E19800400C0C /* maxmspsdk.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B9B805611811E19800400C0C /* maxmspsdk.xcconfig */; };
+		B9B805641811E1A400400C0C /* commonsyms.c in Sources */ = {isa = PBXBuildFile; fileRef = B9B805631811E1A400400C0C /* commonsyms.c */; };
+		B9B805681811E71700400C0C /* libopenvdb.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B805651811E71700400C0C /* libopenvdb.dylib */; };
+		B9B805951811F40E00400C0C /* libtbb.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B805661811E71700400C0C /* libtbb.dylib */; };
+		B9B805961811F40E00400C0C /* libtbbmalloc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B9B805671811E71700400C0C /* libtbbmalloc.dylib */; };
+		B9B805981811F94E00400C0C /* libopenvdb.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = B9B805651811E71700400C0C /* libopenvdb.dylib */; };
+		B9B805991811F94E00400C0C /* libtbb.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = B9B805661811E71700400C0C /* libtbb.dylib */; };
+		B9B8059A1811F94E00400C0C /* libtbbmalloc.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = B9B805671811E71700400C0C /* libtbbmalloc.dylib */; };
+		B9C2A43C17F09A2E0081AE27 /* jit.field.sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9C2A43A17F09A2E0081AE27 /* jit.field.sphere.cpp */; };
+		B9C2A44017F0A0750081AE27 /* jit.field.grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9C2A43E17F0A0750081AE27 /* jit.field.grid.cpp */; };
+		B9C2A44117F0A0750081AE27 /* jit.field.grid.h in Headers */ = {isa = PBXBuildFile; fileRef = B9C2A43F17F0A0750081AE27 /* jit.field.grid.h */; };
+		B9C2A44817F0B2FD0081AE27 /* jit.field.mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9C2A44617F0B2FD0081AE27 /* jit.field.mesh.cpp */; };
+		B9F5A58017EF677C002E8D76 /* jit.field.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9F5A57E17EF677C002E8D76 /* jit.field.cpp */; };
+		B9F5A58117EF677C002E8D76 /* max.jit.field.c in Sources */ = {isa = PBXBuildFile; fileRef = B9F5A57F17EF677C002E8D76 /* max.jit.field.c */; };
+		B9F5A58417EF67CB002E8D76 /* JitGrid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9F5A58217EF67CB002E8D76 /* JitGrid.cpp */; };
+		B9F5A58517EF67CB002E8D76 /* JitGrid.h in Headers */ = {isa = PBXBuildFile; fileRef = B9F5A58317EF67CB002E8D76 /* JitGrid.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B9B805971811F93800400C0C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B9B805981811F94E00400C0C /* libopenvdb.dylib in CopyFiles */,
+				B9B805991811F94E00400C0C /* libtbb.dylib in CopyFiles */,
+				B9B8059A1811F94E00400C0C /* libtbbmalloc.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		8D01CCD20486CAD60068D4B7 /* jit.field.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = jit.field.mxo; sourceTree = BUILT_PRODUCTS_DIR; };
+		B927AE3617FF6A77003011D9 /* jit.field.op.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jit.field.op.cpp; sourceTree = "<group>"; };
+		B98B4B6318031D670017FE4D /* jit.field.particles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jit.field.particles.cpp; sourceTree = "<group>"; };
+		B9B805611811E19800400C0C /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = maxmspsdk.xcconfig; path = ../../maxmspsdk.xcconfig; sourceTree = "<group>"; };
+		B9B805631811E1A400400C0C /* commonsyms.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = commonsyms.c; path = "../../../c74support/max-includes/common/commonsyms.c"; sourceTree = "<group>"; };
+		B9B805651811E71700400C0C /* libopenvdb.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopenvdb.dylib; sourceTree = "<group>"; };
+		B9B805661811E71700400C0C /* libtbb.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libtbb.dylib; sourceTree = "<group>"; };
+		B9B805671811E71700400C0C /* libtbbmalloc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libtbbmalloc.dylib; sourceTree = "<group>"; };
+		B9C2A43A17F09A2E0081AE27 /* jit.field.sphere.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jit.field.sphere.cpp; sourceTree = "<group>"; };
+		B9C2A43E17F0A0750081AE27 /* jit.field.grid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jit.field.grid.cpp; sourceTree = "<group>"; };
+		B9C2A43F17F0A0750081AE27 /* jit.field.grid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jit.field.grid.h; sourceTree = "<group>"; };
+		B9C2A44617F0B2FD0081AE27 /* jit.field.mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jit.field.mesh.cpp; sourceTree = "<group>"; };
+		B9F5A57E17EF677C002E8D76 /* jit.field.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jit.field.cpp; sourceTree = "<group>"; };
+		B9F5A57F17EF677C002E8D76 /* max.jit.field.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = max.jit.field.c; sourceTree = "<group>"; };
+		B9F5A58217EF67CB002E8D76 /* JitGrid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JitGrid.cpp; sourceTree = "<group>"; };
+		B9F5A58317EF67CB002E8D76 /* JitGrid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JitGrid.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D01CCCD0486CAD60068D4B7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B9B805681811E71700400C0C /* libopenvdb.dylib in Frameworks */,
+				B9B805951811F40E00400C0C /* libtbb.dylib in Frameworks */,
+				B9B805961811F40E00400C0C /* libtbbmalloc.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		089C166AFE841209C02AAC07 /* atanh */ = {
+			isa = PBXGroup;
+			children = (
+				B9B805611811E19800400C0C /* maxmspsdk.xcconfig */,
+				08FB77ADFE841716C02AAC07 /* Source */,
+				089C1671FE841209C02AAC07 /* External Frameworks and Libraries */,
+				19C28FB4FE9D528D11CA2CBB /* Products */,
+			);
+			name = atanh;
+			sourceTree = "<group>";
+			usesTabs = 1;
+		};
+		089C1671FE841209C02AAC07 /* External Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				B9B805651811E71700400C0C /* libopenvdb.dylib */,
+				B9B805661811E71700400C0C /* libtbb.dylib */,
+				B9B805671811E71700400C0C /* libtbbmalloc.dylib */,
+			);
+			name = "External Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+		08FB77ADFE841716C02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				B9B805631811E1A400400C0C /* commonsyms.c */,
+				B9F5A57F17EF677C002E8D76 /* max.jit.field.c */,
+				B9C2A43F17F0A0750081AE27 /* jit.field.grid.h */,
+				B9C2A43E17F0A0750081AE27 /* jit.field.grid.cpp */,
+				B9F5A57E17EF677C002E8D76 /* jit.field.cpp */,
+				B9C2A43A17F09A2E0081AE27 /* jit.field.sphere.cpp */,
+				B9C2A44617F0B2FD0081AE27 /* jit.field.mesh.cpp */,
+				B927AE3617FF6A77003011D9 /* jit.field.op.cpp */,
+				B98B4B6318031D670017FE4D /* jit.field.particles.cpp */,
+				B9F5A58317EF67CB002E8D76 /* JitGrid.h */,
+				B9F5A58217EF67CB002E8D76 /* JitGrid.cpp */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		19C28FB4FE9D528D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D01CCD20486CAD60068D4B7 /* jit.field.mxo */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8D01CCC70486CAD60068D4B7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B9F5A58517EF67CB002E8D76 /* JitGrid.h in Headers */,
+				B9C2A44117F0A0750081AE27 /* jit.field.grid.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8D01CCC60486CAD60068D4B7 /* jitter-external */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0FF65FF0096B38E400E9E0B4 /* Build configuration list for PBXNativeTarget "jitter-external" */;
+			buildPhases = (
+				8D01CCC70486CAD60068D4B7 /* Headers */,
+				8D01CCC90486CAD60068D4B7 /* Resources */,
+				8D01CCCB0486CAD60068D4B7 /* Sources */,
+				8D01CCCD0486CAD60068D4B7 /* Frameworks */,
+				8D01CCCF0486CAD60068D4B7 /* Rez */,
+				B9B805971811F93800400C0C /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "jitter-external";
+			productInstallPath = "$(HOME)/Library/Bundles";
+			productName = MaxExternal;
+			productReference = 8D01CCD20486CAD60068D4B7 /* jit.field.mxo */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		089C1669FE841209C02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 0FF65FF4096B38E400E9E0B4 /* Build configuration list for PBXProject "max.jit.field" */;
+			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 089C166AFE841209C02AAC07 /* atanh */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D01CCC60486CAD60068D4B7 /* jitter-external */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D01CCC90486CAD60068D4B7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B9B805621811E19800400C0C /* maxmspsdk.xcconfig in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		8D01CCCF0486CAD60068D4B7 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D01CCCB0486CAD60068D4B7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B9F5A58017EF677C002E8D76 /* jit.field.cpp in Sources */,
+				B9F5A58117EF677C002E8D76 /* max.jit.field.c in Sources */,
+				B9F5A58417EF67CB002E8D76 /* JitGrid.cpp in Sources */,
+				B9C2A43C17F09A2E0081AE27 /* jit.field.sphere.cpp in Sources */,
+				B9C2A44017F0A0750081AE27 /* jit.field.grid.cpp in Sources */,
+				B9C2A44817F0B2FD0081AE27 /* jit.field.mesh.cpp in Sources */,
+				B927AE3817FF6A77003011D9 /* jit.field.op.cpp in Sources */,
+				B98B4B6518031D680017FE4D /* jit.field.particles.cpp in Sources */,
+				B9B805641811E1A400400C0C /* commonsyms.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0FF65FF1096B38E400E9E0B4 /* Development */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B9B805611811E19800400C0C /* maxmspsdk.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				COPY_PHASE_STRIP = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks/";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-framework",
+					JitterAPI,
+					"$(C74_SYM_LINKER_FLAGS)",
+				);
+				PRODUCT_NAME = jit.field;
+				SDKROOT = macosx10.6;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)";
+			};
+			name = Development;
+		};
+		0FF65FF2096B38E400E9E0B4 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B9B805611811E19800400C0C /* maxmspsdk.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
+				COPY_PHASE_STRIP = YES;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks/";
+				LIBRARY_SEARCH_PATHS = "$(SRCROOT)";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"-framework",
+					JitterAPI,
+					"$(C74_SYM_LINKER_FLAGS)",
+				);
+				PRODUCT_NAME = jit.field;
+				SDKROOT = macosx10.6;
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)";
+			};
+			name = Deployment;
+		};
+		0FF65FF5096B38E400E9E0B4 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = NO;
+				USER_HEADER_SEARCH_PATHS = "../../c74support/** ../../c74support-private/**";
+			};
+			name = Development;
+		};
+		0FF65FF6096B38E400E9E0B4 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = NO;
+			};
+			name = Deployment;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0FF65FF0096B38E400E9E0B4 /* Build configuration list for PBXNativeTarget "jitter-external" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0FF65FF1096B38E400E9E0B4 /* Development */,
+				0FF65FF2096B38E400E9E0B4 /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Development;
+		};
+		0FF65FF4096B38E400E9E0B4 /* Build configuration list for PBXProject "max.jit.field" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0FF65FF5096B38E400E9E0B4 /* Development */,
+				0FF65FF6096B38E400E9E0B4 /* Deployment */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Development;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 089C1669FE841209C02AAC07 /* Project object */;
+}
