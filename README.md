@@ -40,3 +40,8 @@ Not all unary operators work for all field formats.  Furthermore, some unary ope
 
 ### Read/Write to a Field
 To read and write to a field with a matrix, use the __jit.field.read__ and __jit.field.write__ objects.  Both objects can index fields in either world or index coordinates.  If the position matrix is type float32, the position matrix will be assumed to be in world coordinates.  If the matrix is type long, it will be assumed to be in index space.  When writing to a matrix, the values to be written need to have the same format as the field in terms of planecount and type.
+
+### Mesh-Volume Conversion
+In addition to directly reading from and writing to a field, level set fields can be generated from mesh and converted to meshes.  To convert a mesh to a field, use the __jit.field.volume__ object.  It can use the matrixoutput of a __jit.gl.model__ object for reading meshes stored on disk.  It can also convert jitter matrices representing geometry data like __jit.gl.mesh__.  For example, with __@drawmode__ set to trigrid, it will interpret a matrix of position values as a grid of triangles.
+
+By contrast, the __jit.field.mesh__ object will convert a level set to a mesh.  It functions just like __jit.gl.isosurface__, using an __@isolevel__ parameter to select which contour of the level set to render as geometry.  The output can be fed directly into __jit.gl.mesh__.  If __@mode__ is set to mesh, the output will consist of vertex, normal, and index matrices.  If __@mode__ is set to particles, it will only output the vertex matrix.
