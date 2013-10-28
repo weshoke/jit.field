@@ -14,7 +14,7 @@ typedef struct _jit_field_mesh
 	t_object	*normal_matrix;
 	t_object	*index_matrix;
 	float		isolevel;
-	long		normals;
+	t_symbol	*mode;
 } t_jit_field_mesh;
 
 void *_jit_field_mesh_class;
@@ -22,7 +22,7 @@ void *_jit_field_mesh_class;
 t_jit_field_mesh *jit_field_mesh_new(void);
 void jit_field_mesh_free(t_jit_field_mesh *x);
 t_jit_err jit_field_mesh_jit_field(t_jit_field_mesh *x, t_symbol *name, long argc, t_atom *argv);
-t_jit_err jit_field_mesh_volume_to_mesh(t_jit_field_mesh *x, t_object *field);
+t_jit_err jit_field_mesh_volume_to_mesh(t_jit_field_mesh *x, t_jit_field_grid *grid);
 void * jit_field_mesh_get_vertex_matrix(t_jit_field_mesh *x);
 void * jit_field_mesh_get_normal_matrix(t_jit_field_mesh *x);
 void * jit_field_mesh_get_index_matrix(t_jit_field_mesh *x);
@@ -35,7 +35,7 @@ t_jit_err jit_field_mesh_init(void)
 	_jit_field_mesh_class = jit_class_new("jit_field_mesh",(method)jit_field_mesh_new,(method)jit_field_mesh_free,
 		sizeof(t_jit_field_mesh),0L);
 
-	//add attributes	
+	// add attributes	
 	attrflags = JIT_ATTR_GET_DEFER_LOW | JIT_ATTR_SET_USURP_LOW;
 	
 	jit_class_addmethod(_jit_field_mesh_class, (method)jit_field_mesh_jit_field, "jit_field", A_GIMME, 0L);
@@ -49,9 +49,10 @@ t_jit_err jit_field_mesh_init(void)
 				(method)0L, (method)0L, calcoffset(t_jit_field_mesh, isolevel));
     jit_class_addattr(_jit_field_mesh_class, (t_jit_object*)attr);
 	
-	attr = (t_jit_object *)jit_object_new(_jit_sym_jit_attr_offset, "normals", _jit_sym_long, attrflags,
-				(method)0L, (method)0L, calcoffset(t_jit_field_mesh, normals));
+	attr = (t_jit_object *)jit_object_new(_jit_sym_jit_attr_offset, "mode", _jit_sym_symbol, attrflags,
+				(method)0L, (method)0L, calcoffset(t_jit_field_mesh, mode));
     jit_class_addattr(_jit_field_mesh_class, (t_jit_object*)attr);
+	CLASS_ATTR_ENUM((t_class *)_jit_field_mesh_class, "mode", 0, "mesh particles");
 
 	jit_class_register(_jit_field_mesh_class);
 
@@ -62,7 +63,7 @@ t_jit_err jit_field_mesh_jit_field(t_jit_field_mesh *x, t_symbol *name, long arg
 {
 	t_jit_err err = JIT_ERR_NONE;
 	if(argc && argv) {
-		t_object *o = (t_object *)jit_field_grid_from_atom(argv);
+		t_jit_field_grid *o = (t_jit_field_grid *)jit_field_grid_from_atom(argv);
 		if(o) {
 			err = jit_field_mesh_volume_to_mesh(x, o);
 		}
@@ -70,14 +71,22 @@ t_jit_err jit_field_mesh_jit_field(t_jit_field_mesh *x, t_symbol *name, long arg
 	return err;
 }
 
-t_jit_err jit_field_mesh_volume_to_mesh(t_jit_field_mesh *x, t_object *field)
+t_jit_err jit_field_mesh_volume_to_mesh(t_jit_field_mesh *x, t_jit_field_grid *grid)
 {
-	void *vertex_matrix = jit_object_method(x->vertex_matrix, gensym("getmatrix"));
-	void *normal_matrix = jit_object_method(x->index_matrix, gensym("getmatrix"));
-	void *index_matrix = jit_object_method(x->index_matrix, gensym("getmatrix"));
-	jit_object_method(field, gensym("volume_to_mesh"), vertex_matrix, normal_matrix, index_matrix, &x->isolevel);
+	t_object *vertex_matrix = (t_object *)jit_object_method(x->vertex_matrix, gensym("getmatrix"));
+	if(x->mode == gensym("particle")) {
+		jit_field_grid_volume_to_mesh_points(grid, vertex_matrix, x->isolevel);
+	}
+	else {	// mode == gensym("mesh")
+		t_object *normal_matrix = (t_object *)jit_object_method(x->normal_matrix, gensym("getmatrix"));
+		t_object *index_matrix = (t_object *)jit_object_method(x->index_matrix, gensym("getmatrix"));
+		jit_field_grid_volume_to_mesh_quads(grid, vertex_matrix, normal_matrix, index_matrix, x->isolevel);
+	}
+	
 	return JIT_ERR_NONE;
 }
+
+
 
 void * jit_field_mesh_get_vertex_matrix(t_jit_field_mesh *x)
 {
@@ -103,7 +112,7 @@ t_jit_field_mesh *jit_field_mesh_new(void)
 		x->vertex_matrix = (t_jit_object *)jit_object_new(gensym("jit_matrix_wrapper"), jit_symbol_unique(), 0, NULL);
 		x->normal_matrix = (t_jit_object *)jit_object_new(gensym("jit_matrix_wrapper"), jit_symbol_unique(), 0, NULL);
 		x->index_matrix = (t_jit_object *)jit_object_new(gensym("jit_matrix_wrapper"), jit_symbol_unique(), 0, NULL);
-		x->normals = 1;
+		x->mode = gensym("mesh");
 		x->isolevel = 0;
 	}
 	else {

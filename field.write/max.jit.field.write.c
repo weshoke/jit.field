@@ -13,6 +13,7 @@ typedef struct _max_jit_field_write
 	void		*proxy;
 	void 		*out1;
 	t_symbol	*field_name;
+	t_symbol	*mode;
 	t_symbol	*in2name;
 	void		*in1matrix;
 	void		*in2matrix;
@@ -46,6 +47,11 @@ int C74_EXPORT main(void)
 	attr = jit_object_new(_jit_sym_jit_attr_offset,"field_name",_jit_sym_symbol,attrflags,
 		(method)0L,(method)0L,calcoffset(t_max_jit_field_write,field_name));
 	max_jit_classex_addattr(p,attr);
+	
+	attr = jit_object_new(_jit_sym_jit_attr_offset,"mode",_jit_sym_symbol,attrflags,
+		(method)0L,(method)0L,calcoffset(t_max_jit_field_write,mode));
+	max_jit_classex_addattr(p,attr);
+	//CLASS_ATTR_ENUM((t_class *)p, "mode", 0, "absolute relative");
 	
     max_jit_classex_standard_wrap(p,NULL,0);
 	return 0;
@@ -111,7 +117,12 @@ void max_jit_field_write_jit_matrix(t_max_jit_field_write *x, t_symbol *name, lo
 						
 						posmatrix = max_jit_field_write_adapt_matrix_to_pos(x, posmatrix);
 						fieldmatrix = max_jit_field_write_adapt_matrix_to_field(x, field, posmatrix, fieldmatrix);
-						jit_object_method(field, gensym("write"), posmatrix, fieldmatrix);
+						if(x->mode == gensym("absolute")) {
+							jit_object_method(field, gensym("write"), posmatrix, fieldmatrix);
+						}
+						else {
+							jit_object_method(field, gensym("write_relative"), posmatrix, fieldmatrix);
+						}
 						
 						atom_setsym(a, x->field_name);
 						outlet_anything(x->ob.o_outlet, gensym("jit_field"), 1, a);
@@ -168,6 +179,7 @@ void *max_jit_field_write_new(t_symbol *s, long argc, t_atom *argv)
 		x->proxy = proxy_new((t_object *)x, 1, &x->lastin);
 		x->out1 = outlet_new(x, NULL);
 		x->field_name = _jit_sym_nothing;
+		x->mode = gensym("absolute");
 		x->in2name = _jit_sym_nothing;
 		x->in1matrix = jit_object_new(gensym("jit_matrix"), NULL);
 		x->in2matrix = jit_object_new(gensym("jit_matrix"), NULL);

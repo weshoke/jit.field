@@ -17,6 +17,8 @@
 		B9B805981811F94E00400C0C /* libopenvdb.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = B9B805651811E71700400C0C /* libopenvdb.dylib */; };
 		B9B805991811F94E00400C0C /* libtbb.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = B9B805661811E71700400C0C /* libtbb.dylib */; };
 		B9B8059A1811F94E00400C0C /* libtbbmalloc.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = B9B805671811E71700400C0C /* libtbbmalloc.dylib */; };
+		B9B805AD1817879E00400C0C /* jit.field.filter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9B805AB1817879C00400C0C /* jit.field.filter.cpp */; };
+		B9BE968C1819AFC500FDAE00 /* jit.field.volume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9BE968A1819AFC500FDAE00 /* jit.field.volume.cpp */; };
 		B9C2A43C17F09A2E0081AE27 /* jit.field.sphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9C2A43A17F09A2E0081AE27 /* jit.field.sphere.cpp */; };
 		B9C2A44017F0A0750081AE27 /* jit.field.grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9C2A43E17F0A0750081AE27 /* jit.field.grid.cpp */; };
 		B9C2A44117F0A0750081AE27 /* jit.field.grid.h in Headers */ = {isa = PBXBuildFile; fileRef = B9C2A43F17F0A0750081AE27 /* jit.field.grid.h */; };
@@ -51,6 +53,8 @@
 		B9B805651811E71700400C0C /* libopenvdb.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopenvdb.dylib; sourceTree = "<group>"; };
 		B9B805661811E71700400C0C /* libtbb.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libtbb.dylib; sourceTree = "<group>"; };
 		B9B805671811E71700400C0C /* libtbbmalloc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libtbbmalloc.dylib; sourceTree = "<group>"; };
+		B9B805AB1817879C00400C0C /* jit.field.filter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jit.field.filter.cpp; sourceTree = "<group>"; };
+		B9BE968A1819AFC500FDAE00 /* jit.field.volume.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jit.field.volume.cpp; sourceTree = "<group>"; };
 		B9C2A43A17F09A2E0081AE27 /* jit.field.sphere.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jit.field.sphere.cpp; sourceTree = "<group>"; };
 		B9C2A43E17F0A0750081AE27 /* jit.field.grid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = jit.field.grid.cpp; sourceTree = "<group>"; };
 		B9C2A43F17F0A0750081AE27 /* jit.field.grid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = jit.field.grid.h; sourceTree = "<group>"; };
@@ -108,7 +112,9 @@
 				B9C2A43A17F09A2E0081AE27 /* jit.field.sphere.cpp */,
 				B9C2A44617F0B2FD0081AE27 /* jit.field.mesh.cpp */,
 				B927AE3617FF6A77003011D9 /* jit.field.op.cpp */,
+				B9B805AB1817879C00400C0C /* jit.field.filter.cpp */,
 				B98B4B6318031D670017FE4D /* jit.field.particles.cpp */,
+				B9BE968A1819AFC500FDAE00 /* jit.field.volume.cpp */,
 				B9F5A58317EF67CB002E8D76 /* JitGrid.h */,
 				B9F5A58217EF67CB002E8D76 /* JitGrid.cpp */,
 			);
@@ -218,6 +224,8 @@
 				B927AE3817FF6A77003011D9 /* jit.field.op.cpp in Sources */,
 				B98B4B6518031D680017FE4D /* jit.field.particles.cpp in Sources */,
 				B9B805641811E1A400400C0C /* commonsyms.c in Sources */,
+				B9B805AD1817879E00400C0C /* jit.field.filter.cpp in Sources */,
+				B9BE968C1819AFC500FDAE00 /* jit.field.volume.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

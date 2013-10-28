@@ -33,7 +33,7 @@ t_jit_err jit_field_sphere_init(void)
 	_jit_field_sphere_class = jit_class_new("jit_field_sphere",(method)jit_field_sphere_new,(method)jit_field_sphere_free,
 		sizeof(t_jit_field_sphere),0L);
 
-	//add attributes	
+	// add attributes	
 	attrflags = JIT_ATTR_GET_DEFER_LOW | JIT_ATTR_SET_USURP_LOW;
 	
 	jit_class_addmethod(_jit_field_sphere_class, (method)jit_field_sphere_create, "create",	A_GIMME, 0L);

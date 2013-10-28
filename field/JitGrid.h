@@ -4,8 +4,10 @@
 #include "jit.common.h"
 #include <openvdb/openvdb.h>
 #include <openvdb/Grid.h>
+#include <openvdb/math/Stencils.h>
 #include <openvdb/tools/Composite.h>
 #include <openvdb/tools/GridOperators.h>
+#include <openvdb/tools/LevelSetFilter.h>
 #include <openvdb/tools/LevelSetSphere.h>
 #include <openvdb/tools/MeshToVolume.h>
 #include <openvdb/tools/ParticlesToLevelSet.h>
@@ -28,6 +30,7 @@ using openvdb::Vec3i;
 using openvdb::Vec2s;
 using openvdb::Vec3s;
 using openvdb::Vec3R;
+using openvdb::Vec3I;
 using openvdb::Vec4I;
 using openvdb::Coord;
 using std::vector;
@@ -50,6 +53,7 @@ public:
 	
 	virtual ~JitGrid() {}
 	
+	bool operator==(const JitGrid& other);
 	void shallowCopy(const JitGrid& src);
 	
 	GridType getGridType() const { return gridType; }
@@ -62,6 +66,7 @@ public:
 	void setBackgroundValue(float *v);
 	void setBackgroundValue(int *v);
 	void sphere(const Vec3s& center, float radius, float halfWidth);
+	void meshToVolume(const vector<Vec3s>& points, const vector<Vec3I>& triangles, float halfwidth);
 	void volumeToMesh(vector<Vec3s>& points, vector<Vec4I>& indices, float isovalue);
 	void rasterizeParticles(t_jit_matrix_info *minfo, char *ptr, float radius);
 	
@@ -109,6 +114,14 @@ public:
 	void curl(JitGrid& in1);
 	void curl(JitGrid& in1);
 	
+	void meanCurvatureFilter();
+	void laplacianFilter();
+	void gaussianFilter(float width);
+	void offsetFilter(float offset);
+	void medianFilter(float width);
+	void meanFilter(float width);
+	
+	Vec3s gradient(const Vec3s& xyz) const;
 	
 	Vec3s indexToWorld(const Coord& ijk) const;
 	Coord worldToIndex(const Vec3s& xyz) const;
@@ -123,14 +136,7 @@ public:
 	void setPos(const Vec3s& xyz, float *v);
 	void getPos(const Vec3s& xyz, float *v) const;
 	
-	/*
-	Int32Grid& getInt1Grid() { return *int1Grid; }
-	Vec2IGrid& getInt2Grid() { return *int2Grid; }
-	Vec3IGrid& getInt3Grid() { return *int3Grid; }
-	FloatGrid& getFloat1Grid() { return *float1Grid; }
-	Vec2SGrid& getFloat2Grid() { return *float2Grid; }
-	Vec3SGrid& getFloat3Grid() { return *float3Grid; }
-	*/
+	bool isLevelset() const;
 
 protected:
 	void rasterizeParticlesND(openvdb::tools::ParticlesToLevelSet<FloatGrid>& particleRasterizer, int dimcount, t_jit_matrix_info *minfo, char *ptr, float radius);
@@ -142,7 +148,6 @@ protected:
 	template<typename T>
 	void setGrid(const typename T::Ptr& ptr);
 	
-	bool isLevelset() const;
 	bool equivalentFormats(const JitGrid& grid) const;
 
 	GridType gridType;
@@ -156,37 +161,5 @@ protected:
 	Vec2SGrid::Ptr float2Grid;
 	Vec3SGrid::Ptr float3Grid;
 };
-
-
-/*
-class JitGrid{
-public:
-	JitGrid();
-	JitGrid(const JitGrid& src);
-	void copy(const JitGrid& src);
-
-	void setBackgroundValue(float v);
-	void sphere(const Vec3s& center, float radius, float halfWidth);
-	void volumeToMesh(vector<Vec3s>& points, vector<Vec4I>& indices, float isovalue);
-	FloatGrid& getFloatGrid() { return *floatGrid; }
-	void compMax(JitGrid& in1, JitGrid& in2);
-	void compMin(JitGrid& in1, JitGrid& in2);
-	void compAdd(JitGrid& in1, JitGrid& in2);
-	void compMul(JitGrid& in1, JitGrid& in2);
-	void rasterizeParticles(t_jit_matrix_info *minfo, char *ptr, float radius);
-	void setCoord(const Coord& c, float v);
-	float getCoord(const Coord& c);
-	void setPos(const Vec3s& pos, float v);
-	float getPos(const Vec3s& pos);
-	Vec3s indexToWorld(const Coord& ijk);
-	Coord worldToIndex(const Vec3s& xyz);
-
-protected:
-	float voxelSize;
-	FloatGrid::Ptr floatGrid;
-	Vec2SGrid::Ptr vec2Grid;
-	Vec3SGrid::Ptr vec3Grid;
-};
-*/
 
 #endif // JIT_GRID_H

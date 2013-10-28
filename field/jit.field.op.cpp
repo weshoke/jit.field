@@ -36,7 +36,7 @@ t_jit_err jit_field_op_init(void)
 	_jit_field_op_class = jit_class_new("jit_field_op",(method)jit_field_op_new,(method)jit_field_op_free,
 		sizeof(t_jit_field_op),0L);
 
-	//add attributes	
+	// add attributes	
 	attrflags = JIT_ATTR_GET_DEFER_LOW | JIT_ATTR_SET_USURP_LOW;
 	
 	jit_class_addmethod(_jit_field_op_class, (method)jit_field_op_getfield, "getfield",	A_CANT, 0L);
@@ -45,7 +45,7 @@ t_jit_err jit_field_op_init(void)
 	attr = (t_jit_object *)jit_object_new(_jit_sym_jit_attr_offset, "op", _jit_sym_symbol, attrflags,
 				(method)0L, (method)0L, calcoffset(t_jit_field_op, op));
     jit_class_addattr(_jit_field_op_class, (t_jit_object*)attr);
-	CLASS_ATTR_ENUM((t_class *)_jit_field_op_class, "op", 0, "max min + *");
+	CLASS_ATTR_ENUM((t_class *)_jit_field_op_class, "op", 0, "max min + * normalize curvature laplacian gradient divergence curl");
 
 	jit_class_register(_jit_field_op_class);
 	

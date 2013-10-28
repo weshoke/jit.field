@@ -19,8 +19,6 @@ t_jit_err jit_field_grid_getattr_type(t_jit_field_grid *x, void *attr, long *arg
 t_jit_err jit_field_grid_setattr_type(t_jit_field_grid *x, void *attr, long argc, t_atom *argv);
 t_jit_err jit_field_grid_getattr_voxelsize(t_jit_field_grid *x, void *attr, long *argc, t_atom **argv);
 t_jit_err jit_field_grid_setattr_voxelsize(t_jit_field_grid *x, void *attr, long argc, t_atom *argv);
-t_jit_err jit_field_volume_to_mesh(t_jit_field_grid *x, t_object *vertex_matrix, t_object *index_matrix, float *isolevel);
-t_jit_err jit_field_volume_to_mesh_with_normals(t_jit_field_grid *x, t_object *vertex_matrix, t_object *normal_matrix, t_object *index_matrix, float *isolevel);
 
 t_jit_err jit_field_grid_read(t_jit_field_grid *x, t_object *srcmatrix, t_object *dstmatrix);
 t_jit_err jit_field_grid_read_world(
@@ -46,6 +44,18 @@ t_jit_err jit_field_grid_write_index(
 	t_jit_matrix_info *field_minfo, char *field_data
 );
 
+t_jit_err jit_field_grid_write_relative(t_jit_field_grid *x, t_object *posmatrix, t_object *fieldmatrix);
+t_jit_err jit_field_grid_write_relative_world(
+	t_jit_field_grid *x,
+	t_jit_matrix_info *pos_minfo, char *pos_data,
+	t_jit_matrix_info *field_minfo, char *field_data
+);
+t_jit_err jit_field_grid_write_relative_index(
+	t_jit_field_grid *x,
+	t_jit_matrix_info *coord_minfo, char *coord_data,
+	t_jit_matrix_info *field_minfo, char *field_data
+);
+
 t_jit_err jit_field_grid_set_background_value(t_jit_field_grid *x, t_symbol *s, long argc, t_atom *argv);
 
 t_jit_err jit_field_grid_init(void)
@@ -58,10 +68,9 @@ t_jit_err jit_field_grid_init(void)
 		
 	
 	jit_class_addmethod(_jit_field_grid_class, (method)jit_object_register, "register", A_CANT, 0L);
-	jit_class_addmethod(_jit_field_grid_class, (method)jit_field_volume_to_mesh, "volume_to_mesh", A_CANT, 0L);
-	jit_class_addmethod(_jit_field_grid_class, (method)jit_field_volume_to_mesh_with_normals, "volume_to_mesh_with_normals", A_CANT, 0L);
 	jit_class_addmethod(_jit_field_grid_class, (method)jit_field_grid_read, "read", A_CANT, 0L);
 	jit_class_addmethod(_jit_field_grid_class, (method)jit_field_grid_write, "write", A_CANT, 0L);
+	jit_class_addmethod(_jit_field_grid_class, (method)jit_field_grid_write_relative, "write_relative", A_CANT, 0L);
 	jit_class_addmethod(_jit_field_grid_class, (method)jit_field_grid_set_background_value, "set_background_value", A_GIMME, 0L);
 	
 	// add attributes
@@ -184,23 +193,12 @@ t_jit_err jit_field_grid_setattr_type(t_jit_field_grid *x, void *attr, long argc
 	return JIT_ERR_NONE;
 }
 
-t_jit_err jit_field_volume_to_mesh(t_jit_field_grid *x, t_object *vertex_matrix, t_object *index_matrix, float *isolevel)
+t_jit_err jit_field_grid_points_to_vertex_matrix(t_jit_field_grid *x, const vector<Vec3s>& points, t_object *vertex_matrix)
 {
-	t_jit_err err = JIT_ERR_NONE;
 	t_jit_matrix_info vertex_info;
-	t_jit_matrix_info index_info;
 	float *vptr;
-	float *nptr;
-	t_int32	*iptr;
 	unsigned int i;
 	
-	vector<Vec3s> points;
-	vector<Vec3s> normals;
-	vector<Vec4I> quads;
-
-	x->grid->volumeToMesh(points, quads, *isolevel);
-	
-	// vertices
 	vertex_info.planecount = 3;
 	vertex_info.type = _jit_sym_float32;
 	vertex_info.dimcount = 1;
@@ -217,15 +215,23 @@ t_jit_err jit_field_volume_to_mesh(t_jit_field_grid *x, t_object *vertex_matrix,
 		*vptr++ = point.z();
 	}
 	
-	// quads
+	return JIT_ERR_NONE;
+}
+
+t_jit_err jit_field_grid_quads_to_index_matrix(t_jit_field_grid *x, const vector<Vec4I>& quads, t_object *index_matrix)
+{
+	t_jit_matrix_info index_info;
+	t_int32	*iptr;
+	unsigned int i;
+	
 	index_info.planecount = 1;
 	index_info.type = _jit_sym_long;
 	index_info.dimcount = 1;
 	index_info.dim[0] = quads.size()*4;
+	
 	jit_object_method(index_matrix, _jit_sym_setinfo, &index_info);
 	jit_object_method(index_matrix, _jit_sym_getinfo, &index_info);
-
-
+	
 	jit_object_method(index_matrix, _jit_sym_getdata, &iptr);
 	for(i=0; i < quads.size(); ++i) {
 		const Vec4I& quad = quads[i];
@@ -235,70 +241,64 @@ t_jit_err jit_field_volume_to_mesh(t_jit_field_grid *x, t_object *vertex_matrix,
 		*iptr++ = quad[3];
 	}
 	
-	return err;
+	return JIT_ERR_NONE;
 }
 
-t_jit_err jit_field_volume_to_mesh_with_normals(t_jit_field_grid *x, t_object *vertex_matrix, t_object *normal_matrix, t_object *index_matrix, float *isolevel)
+t_jit_err jit_field_grid_points_to_normal_matrix(t_jit_field_grid *x, const vector<Vec3s>& points, t_object *normal_matrix)
 {
-	t_jit_err err = JIT_ERR_NONE;
-	t_jit_matrix_info vertex_info;
-	t_jit_matrix_info index_info;
-	float *vptr;
+	t_jit_matrix_info normal_info;
 	float *nptr;
-	t_int32	*iptr;
 	unsigned int i;
+	JitGrid& grid = *(x->grid);
 	
-	vector<Vec3s> points;
-	vector<Vec3s> normals;
-	vector<Vec4I> quads;
-
-	x->grid->volumeToMesh(points, quads, *isolevel);
+	normal_info.planecount = 3;
+	normal_info.type = _jit_sym_float32;
+	normal_info.dimcount = 1;
+	normal_info.dim[0] = points.size();
 	
-	// vertices
-	vertex_info.planecount = 3;
-	vertex_info.type = _jit_sym_float32;
-	vertex_info.dimcount = 1;
-	vertex_info.dim[0] = points.size();
+	jit_object_method(normal_matrix, _jit_sym_setinfo, &normal_info);
+	jit_object_method(normal_matrix, _jit_sym_getinfo, &normal_info);
 	
-	jit_object_method(vertex_matrix, _jit_sym_setinfo, &vertex_info);
-	jit_object_method(vertex_matrix, _jit_sym_getinfo, &vertex_info);
-	
-	// same info parameters as the vertex_matrix
-	jit_object_method(normal_matrix, _jit_sym_setinfo, &vertex_info);
-	jit_object_method(normal_matrix, _jit_sym_getinfo, &vertex_info);
-		
-	jit_object_method(vertex_matrix, _jit_sym_getdata, &vptr);
 	jit_object_method(normal_matrix, _jit_sym_getdata, &nptr);
 	for(i=0; i < points.size(); ++i) {
-		const Vec3s& point = points[i];
-		*vptr++ = point.x();
-		*vptr++ = point.y();
-		*vptr++ = point.z();
-		
-		//Vec3s n =
-		//openvdb::math::Gradient<, openvdb::math::CD_2ND>
+		Vec3s normal = grid.gradient(points[i]);
+		normal.normalize();
+		*nptr++ = normal.x();
+		*nptr++ = normal.y();
+		*nptr++ = normal.z();
 	}
 	
-	// quads
-	index_info.planecount = 1;
-	index_info.type = _jit_sym_long;
-	index_info.dimcount = 1;
-	index_info.dim[0] = quads.size()*4;
-	jit_object_method(index_matrix, _jit_sym_setinfo, &index_info);
-	jit_object_method(index_matrix, _jit_sym_getinfo, &index_info);
+	return JIT_ERR_NONE;
+}
 
+t_jit_err jit_field_grid_volume_to_mesh_points(t_jit_field_grid *x, t_object *vertex_matrix, float isolevel)
+{
+	t_jit_err err = JIT_ERR_NONE;
+	
+	vector<Vec3s> points;
+	vector<Vec4I> quads;
 
-	jit_object_method(index_matrix, _jit_sym_getdata, &iptr);
-	for(i=0; i < quads.size(); ++i) {
-		const Vec4I& quad = quads[i];
-		*iptr++ = quad[0];
-		*iptr++ = quad[1];
-		*iptr++ = quad[2];
-		*iptr++ = quad[3];
-	}
+	x->grid->volumeToMesh(points, quads, isolevel);
+	jit_field_grid_points_to_vertex_matrix(x, points, vertex_matrix);
 	
 	return err;
 }
+
+t_jit_err jit_field_grid_volume_to_mesh_quads(t_jit_field_grid *x, t_object *vertex_matrix, t_object *normal_matrix, t_object *index_matrix, float isolevel)
+{
+	t_jit_err err = JIT_ERR_NONE;
+	
+	vector<Vec3s> points;
+	vector<Vec4I> quads;
+
+	x->grid->volumeToMesh(points, quads, isolevel);
+	jit_field_grid_points_to_vertex_matrix(x, points, vertex_matrix);
+	jit_field_grid_quads_to_index_matrix(x, quads, index_matrix);
+	jit_field_grid_points_to_normal_matrix(x, points, normal_matrix);
+	
+	return err;
+}
+
 
 /*
 	Assumes	
@@ -582,6 +582,148 @@ t_jit_err jit_field_grid_write_index(
 {
 	t_jit_err err = JIT_ERR_NONE;
 	err = jit_field_grid_write_index_ndim(x, coord_minfo->dimcount, coord_minfo, coord_data, field_minfo, field_data);
+	return err;
+}
+
+t_jit_err jit_field_grid_write_relative(t_jit_field_grid *x, t_object *posmatrix, t_object *fieldmatrix)
+{
+	t_jit_err err = JIT_ERR_NONE;
+	t_jit_matrix_info posminfo;
+	t_jit_matrix_info fieldminfo;
+	char *posdata = NULL;
+	char *fielddata = NULL;
+	
+	jit_object_method(posmatrix, _jit_sym_getinfo, &posminfo);
+	jit_object_method(posmatrix, _jit_sym_getdata, &posdata);
+	
+	jit_object_method(fieldmatrix, _jit_sym_getinfo, &fieldminfo);
+	jit_object_method(fieldmatrix, _jit_sym_getdata, &fielddata);
+	
+	if(posminfo.planecount != 3) return err;
+	if(!jit_field_grid_format_matches_matrix_info(x, &fieldminfo)) return err;
+	
+	if(posminfo.type == _jit_sym_float32) {
+		err = jit_field_grid_write_relative_world(x, &posminfo, posdata, &fieldminfo, fielddata);
+	}
+	else if(posminfo.type == _jit_sym_long) {
+		err = jit_field_grid_write_relative_index(x, &posminfo, posdata, &fieldminfo, fielddata);
+	}
+	
+	return err;
+}
+
+t_jit_err jit_field_grid_write_relative_world_ndim(
+	t_jit_field_grid *x,
+	int dimcount,
+	t_jit_matrix_info *pos_minfo, char *pos_data,
+	t_jit_matrix_info *field_minfo, char *field_data
+)
+{
+	t_jit_err err = JIT_ERR_NONE;
+	int i, j;
+	int w, h;
+	JitGrid &grid = *(x->grid);
+	int planecount = field_minfo->planecount;
+	
+	switch(dimcount) {
+		case 1:
+		case 2:
+			w = pos_minfo->dim[0];
+			h = pos_minfo->dimcount > 1 ? pos_minfo->dim[1] : 1;
+	
+			for(j=0; j < h; ++j) {
+				Vec3s *xyz = (Vec3s *)(pos_data + j*pos_minfo->dimstride[1]);
+				float *v = (float *)(field_data + j*field_minfo->dimstride[1]);
+				
+				for(i=0; i < w; ++i) {
+					float cval[3];
+					grid.getPos(*xyz, cval);
+					v[0] += cval[0];
+					v[1] += cval[1];
+					v[2] += cval[2];
+					grid.setPos(*xyz, v);
+					v += planecount;
+					++xyz;
+				}
+			}
+			break;
+			
+		default:
+			for(i=0; i< pos_minfo->dim[dimcount-1]; ++i) {
+				char *pos_data_ndim = (char *)pos_data + i*pos_minfo->dimstride[dimcount-1];
+				char *field_data_ndim  = (char *)field_data + i*field_minfo->dimstride[dimcount-1];
+				jit_field_grid_write_relative_world_ndim(x, dimcount-1, pos_minfo, pos_data_ndim, field_minfo, field_data_ndim);
+			}
+	}
+			
+	return err;
+}
+
+t_jit_err jit_field_grid_write_relative_world(
+	t_jit_field_grid *x,
+	t_jit_matrix_info *pos_minfo, char *pos_data,
+	t_jit_matrix_info *field_minfo, char *field_data
+)
+{
+	t_jit_err err = JIT_ERR_NONE;
+	err = jit_field_grid_write_relative_world_ndim(x, pos_minfo->dimcount, pos_minfo, pos_data, field_minfo, field_data);
+	return err;
+}
+
+t_jit_err jit_field_grid_write_relative_index_ndim(
+	t_jit_field_grid *x,
+	int dimcount,
+	t_jit_matrix_info *coord_minfo, char *coord_data,
+	t_jit_matrix_info *field_minfo, char *field_data
+)
+{
+	t_jit_err err = JIT_ERR_NONE;
+	int i, j;
+	int w, h;
+	JitGrid &grid = *(x->grid);
+	int planecount = field_minfo->planecount;
+	
+	switch(dimcount) {
+		case 1:
+		case 2:
+			w = coord_minfo->dim[0];
+			h = coord_minfo->dimcount > 1 ? coord_minfo->dim[1] : 1;
+	
+			for(j=0; j < h; ++j) {
+				Coord *ijk = (Coord *)(coord_data + j*coord_minfo->dimstride[1]);
+				float *v = (float *)(field_data + j*field_minfo->dimstride[1]);
+				
+				for(i=0; i < w; ++i) {
+					float cval[3];
+					grid.getIndex(*ijk, cval);
+					v[0] += cval[0];
+					v[1] += cval[1];
+					v[2] += cval[2];
+					grid.setIndex(*ijk, v);
+					v += planecount;
+					++ijk;
+				}
+			}
+			break;
+			
+		default:
+			for(i=0; i< coord_minfo->dim[dimcount-1]; ++i) {
+				char *coord_data_ndim = (char *)coord_data + i*coord_minfo->dimstride[dimcount-1];
+				char *field_data_ndim  = (char *)field_data + i*field_minfo->dimstride[dimcount-1];
+				jit_field_grid_write_relative_index_ndim(x, dimcount-1, coord_minfo, coord_data_ndim, field_minfo, field_data_ndim);
+			}
+	}
+	return err;
+}
+
+t_jit_err jit_field_grid_write_relative_index(
+	t_jit_field_grid *x,
+	t_jit_matrix_info *coord_minfo, char *coord_data,
+	t_jit_matrix_info *field_minfo, char *field_data
+)
+{
+	t_jit_err err = JIT_ERR_NONE;
+	err = jit_field_grid_write_relative_index_ndim(x, coord_minfo->dimcount, coord_minfo, coord_data, field_minfo, field_data);
 	return err;
 }
 

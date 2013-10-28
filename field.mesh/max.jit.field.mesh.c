@@ -54,16 +54,17 @@ void max_jit_field_mesh_output_mesh_geometry(t_max_jit_field_mesh *x)
 	t_atom a[1];
 	void *o = max_jit_obex_jitob_get(x);
 	void *vm = jit_object_method(o, gensym("get_vertex_matrix"));
-	void *im = jit_object_method(o, gensym("get_index_matrix"));
 	t_symbol *vname = jit_attr_getsym(vm, gensym("name"));
-	t_symbol *iname = jit_attr_getsym(im, gensym("name"));
 	
-	atom_setsym(a, iname);
-	outlet_anything(x->ob.o_outlet, gensym("index_matrix"), 1, a);
-	
-	if(jit_attr_getlong(o, gensym("normals")) == 1) {
+	if(jit_attr_getsym(o, gensym("mode")) == gensym("mesh")) {
+		void *im = jit_object_method(o, gensym("get_index_matrix"));
 		void *nm = jit_object_method(o, gensym("get_normal_matrix"));
+		t_symbol *iname = jit_attr_getsym(im, gensym("name"));
 		t_symbol *nname = jit_attr_getsym(nm, gensym("name"));
+		
+		atom_setsym(a, iname);
+		outlet_anything(x->ob.o_outlet, gensym("index_matrix"), 1, a);
+	
 		atom_setsym(a, nname);
 		outlet_anything(x->ob.o_outlet, gensym("normal_matrix"), 1, a);
 	}

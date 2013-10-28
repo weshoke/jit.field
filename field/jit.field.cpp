@@ -9,7 +9,9 @@ t_jit_err jit_field_grid_init(void);
 t_jit_err jit_field_sphere_init(void);
 t_jit_err jit_field_mesh_init(void);
 t_jit_err jit_field_op_init(void);
+t_jit_err jit_field_filter_init(void);
 t_jit_err jit_field_particles_init(void);
+t_jit_err jit_field_volume_init(void);
 
 typedef struct _jit_field 
 {
@@ -83,7 +85,7 @@ t_jit_err jit_field_init(void)
 	jit_class_addmethod(_jit_field_class, (method)jit_field_jit_field, "jit_field" , A_GIMME, 0L);
 	jit_class_addmethod(_jit_field_class, (method)jit_field_getgrid, "getgrid" , A_CANT, 0L);
 	
-	//add attributes	
+	// add attributes	
 	attrflags = JIT_ATTR_GET_DEFER_LOW | JIT_ATTR_SET_USURP_LOW;
 	
 	attr = (t_jit_object *)jit_object_new(_jit_sym_jit_attr_offset, "name", _jit_sym_symbol, attrflags,
@@ -94,7 +96,9 @@ t_jit_err jit_field_init(void)
 	jit_field_sphere_init();
 	jit_field_mesh_init();
 	jit_field_op_init();
+	jit_field_filter_init();
 	jit_field_particles_init();
+	jit_field_volume_init();
 	
 	jit_field_wrapit((t_class *)_jit_field_class);
 	jit_class_register(_jit_field_class);

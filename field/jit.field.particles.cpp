@@ -29,7 +29,7 @@ t_jit_err jit_field_particles_init(void)
 	_jit_field_particles_class = jit_class_new("jit_field_particles",(method)jit_field_particles_new,(method)jit_field_particles_free,
 		sizeof(t_jit_field_particles),0L);
 
-	//add attributes	
+	// add attributes	
 	attrflags = JIT_ATTR_GET_DEFER_LOW | JIT_ATTR_SET_USURP_LOW;
 	
 	jit_class_addmethod(_jit_field_particles_class, (method)jit_field_particles_getfield, "getfield",	A_CANT, 0L);

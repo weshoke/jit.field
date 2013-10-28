@@ -45,7 +45,32 @@ protected:
 	Vec3s *points;
 };
 
+bool JitGrid::operator==(const JitGrid& other) {
+	if(planecount == other.planecount && gridType == other.gridType) {
+		switch(gridType) {
+			case GridInt:
+				switch(planecount) {
+					case 1: return int1Grid == other.int1Grid;
+					case 2: return int2Grid == other.int2Grid;
+					case 3: return int3Grid == other.int3Grid;
+				}
+				break;
+			
+			case GridFloat:
+				switch(planecount) {
+					case 1: return float1Grid == other.float1Grid;
+					case 2: return float2Grid == other.float2Grid;
+					case 3: return float3Grid == other.float3Grid;
+				}
+				break;
+		}
+	}
+	return false;
+}
+
 void JitGrid::shallowCopy(const JitGrid& src) {
+	if(*this == src) return;
+
 	destroyGrid();
 	gridType = src.gridType;
 	planecount = src.planecount;
@@ -186,6 +211,14 @@ void JitGrid::sphere(const Vec3s& center, float radius, float halfWidth) {
 		destroyGrid();
 	}
 	float1Grid = openvdb::tools::createLevelSetSphere<FloatGrid>(radius, center, voxelSize, halfWidth);
+}
+
+void JitGrid::meshToVolume(const vector<Vec3s>& points, const vector<Vec3I>& triangles, float halfwidth) {
+	if(!isLevelset()) {
+		destroyGrid();
+	}
+	openvdb::math::Transform::Ptr xform = openvdb::math::Transform::createLinearTransform(voxelSize);
+	float1Grid = openvdb::tools::meshToLevelSet<FloatGrid>(*xform, points, triangles, halfwidth);
 }
 
 void JitGrid::volumeToMesh(vector<Vec3s>& points, vector<Vec4I>& indices, float isovalue) {
@@ -807,6 +840,66 @@ void JitGrid::curl(JitGrid& in1) {
 			}
 			break;
 	}
+}
+
+void JitGrid::meanCurvatureFilter() {
+	if(!isLevelset()) return;
+
+	openvdb::tools::LevelSetFilter<FloatGrid> filter(*float1Grid);
+	filter.meanCurvature();
+}
+
+void JitGrid::laplacianFilter(){
+	if(!isLevelset()) return;
+	
+	openvdb::tools::LevelSetFilter<FloatGrid> filter(*float1Grid);
+	filter.laplacian();
+}
+
+void JitGrid::gaussianFilter(float width){
+	if(!isLevelset()) return;
+	
+	openvdb::tools::LevelSetFilter<FloatGrid> filter(*float1Grid);
+	filter.gaussian(width);
+}
+
+void JitGrid::offsetFilter(float offset){
+	if(!isLevelset()) return;
+	
+	openvdb::tools::LevelSetFilter<FloatGrid> filter(*float1Grid);
+	filter.offset(offset);
+}
+
+void JitGrid::medianFilter(float width){
+	if(!isLevelset()) return;
+	
+	openvdb::tools::LevelSetFilter<FloatGrid> filter(*float1Grid);
+	filter.median(width);
+}
+
+void JitGrid::meanFilter(float width) {
+	if(!isLevelset()) return;
+	
+	openvdb::tools::LevelSetFilter<FloatGrid> filter(*float1Grid);
+	filter.mean(width);
+}
+
+Vec3s JitGrid::gradient(const Vec3s& xyz) const {
+	if(isLevelset()) {
+//		openvdb::math::BoxStencil<FloatGrid> stencil(*float1Grid);
+		Coord ijk = worldToIndex(xyz);
+		openvdb::math::SevenPointStencil<FloatGrid> stencil(*float1Grid);
+		stencil.moveTo(ijk);
+		
+		openvdb::math::GenericMap map(*float1Grid);
+        return openvdb::math::Gradient<openvdb::math::GenericMap, openvdb::math::CD_2ND>::result(map, stencil);
+			
+			
+		
+//		stencil.moveTo(ijk);
+//		return stencil.gradient(Vec3s(ijk.x(), ijk.y(), ijk.z()));
+	}
+	return Vec3s();
 }
 
 Vec3s JitGrid::indexToWorld(const Coord& ijk) const {
