@@ -100,7 +100,7 @@ strong {
 
 <h3>Mesh-Volume Conversion</h3>
 <p>
-In addition to directly reading from and writing to a field, level set fields can be generated from mesh and converted to meshes.  To convert a mesh to a field, use the <strong>jit.field.volume</strong> object.  It can use the matrixoutput of a <strong>jit.gl.model</strong> object for reading meshes stored on disk.  It can also convert jitter matrices representing geometry data like <strong>jit.gl.mesh</strong>.  For example, with <string>@drawmode</strong> set to trigrid, it will interpret a matrix of position values as a grid of triangles.
+In addition to directly reading from and writing to a field, level set fields can be generated from mesh and converted to meshes.  To convert a mesh to a field, use the <strong>jit.field.volume</strong> object.  It can use the matrixoutput of a <strong>jit.gl.model</strong> object for reading meshes stored on disk.  It can also convert jitter matrices representing geometry data like <strong>jit.gl.mesh</strong>.  For example, with <strong>@drawmode</strong> set to trigrid, it will interpret a matrix of position values as a grid of triangles.
 </p>
 <p>
 By contrast, the <strong>jit.field.mesh</strong> object will convert a level set to a mesh.  It functions just like <strong>jit.gl.isosurface</strong>, using an <strong>@isolevel</strong> parameter to select which contour of the level set to render as geometry.  The output can be fed directly into <strong>jit.gl.mesh</strong>.  If <strong>@mode</strong> is set to mesh, the output will consist of vertex, normal, and index matrices.  If <strong>@mode</strong> is set to particles, it will only output the vertex matrix.
